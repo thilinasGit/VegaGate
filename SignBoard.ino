@@ -8,17 +8,17 @@
 #include <fonts/Arial14.h>
 #include <ESP8266WiFi.h>
 
-const char *ssid = "GateSpot";       /// optional
+const char *ssid = "GateSpot";
 const char *password = "12121212";
 
 const int COUNTDOWN_FROM = 6;
 int counter = COUNTDOWN_FROM;
 bool greeted;
 int animatorIndex = 0, aDelay = 0;
+int trigger;
 
-
-SPIDMD dmd(1, 1,15,16,12,0); // These are not pin numbrs marked on board 
-DMD_TextBox box(dmd, 0, 2);  
+SPIDMD dmd(1, 1,15,16,12,0); // DMD controls the entire display
+DMD_TextBox box(dmd, 0, 2);  // "box" provides a text box to automatically write to/scroll the display
 
 // the setup routine runs once when you press reset:
 void setup() {
@@ -30,8 +30,9 @@ void setup() {
 
 // the loop routine runs over and over again forever:
 void loop() {
-  while (digitalRead(D4) && counter == 6) {
-
+  trigger=0;
+  while (trigger<2 && counter == 6) {
+    
     if (aDelay >= 10) {
       aDelay = 0;
       box.clear();
@@ -47,9 +48,13 @@ void loop() {
     }
 
     aDelay++;
-    delay(50);
+    delay(30);
+    if(digitalRead(D4)==LOW)
+      trigger++;
+    else trigger--;
 
-
+    if (trigger<0) trigger=0;
+    
     if (counter == 6 && WiFi.softAPgetStationNum() > 0) {
       if (!greeted) {
         box.clear();
