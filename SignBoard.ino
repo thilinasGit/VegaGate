@@ -8,7 +8,7 @@
 #include <fonts/Arial14.h>
 #include <ESP8266WiFi.h>
 
-const char *ssid = "GateSpot";
+const char *ssid = "GateSpot";       /// optional
 const char *password = "12121212";
 
 const int COUNTDOWN_FROM = 6;
@@ -17,8 +17,8 @@ bool greeted;
 int animatorIndex = 0, aDelay = 0;
 
 
-SPIDMD dmd(1, 1); // DMD controls the entire display
-DMD_TextBox box(dmd, 0, 2);  // "box" provides a text box to automatically write to/scroll the display
+SPIDMD dmd(1, 1,15,16,12,0); // These are not pin numbrs marked on board 
+DMD_TextBox box(dmd, 0, 2);  
 
 // the setup routine runs once when you press reset:
 void setup() {
